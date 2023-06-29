@@ -20,7 +20,35 @@ export const likePost = (id) => async (dispatch) => {
     console.log(error);
     dispatch({
       type: "likeFailure",
-      payload: error?.response?.data,
+      payload: error?.response?.data?.message,
+    });
+  }
+};
+// ADD COMMENT TO A POST //
+export const addCommentOnPost = (id, comment) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "addCommentsRequest",
+    });
+    const { data } = await axios.put(
+      `${url}/post/comment/${id}`,
+      { comment },
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    dispatch({
+      type: "addCommentsSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: "addCommentsFailure",
+      payload: error?.response?.data?.message,
     });
   }
 };

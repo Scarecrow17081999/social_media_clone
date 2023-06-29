@@ -14,7 +14,7 @@ import {
   DeleteOutline,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { likePost } from "../../actions/postActions";
+import { addCommentOnPost, likePost } from "../../actions/postActions";
 import { getFollowingPost } from "../../actions/userActions";
 
 const Post = ({
@@ -50,11 +50,22 @@ const Post = ({
     dispatch(getFollowingPost());
   };
 
-  const addCommentHandler = () => {};
+  const addCommentHandler = (e) => {
+    e.preventDefault();
+    dispatch(addCommentOnPost(postId, commentValue));
+  };
 
   const handleClickOpen = () => {
     setCommentOpen(true);
   };
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const handleClose = () => {
+    setCommentOpen(false);
+  };
+
   useEffect(() => {
     likes.forEach((like) => {
       if (like._id == user._id) {
@@ -114,10 +125,41 @@ const Post = ({
           <Button>{isDelete ? <DeleteOutline /> : null}</Button>
         </div>
 
-        <Dialog
-          open={likedUser}
-          onClose={() => setLikedUser(!likedUser)}
-        ></Dialog>
+        <div>
+          <Typography variant="none" marginRight={"1rem"}>
+            {comments.length}
+          </Typography>
+          <Dialog
+            fullScreen={fullScreen}
+            open={commentOpen}
+            onClose={handleClose}
+            aria-labelledby="responsive-dialog-title"
+          >
+            <div className="DialogBox">
+              <Typography variant="h4">Liked By</Typography>
+              <form className="commentForm">
+                <input
+                  type="text"
+                  name=""
+                  value={commentValue}
+                  onChange={() => setCommentValue(e.target.value)}
+                  placeholder="Write a comment"
+                />
+              </form>
+
+              {comments &&
+                comments.map(
+                  (comment) => ""
+                  // <User
+                  //   key={comment._id}
+                  //   userId={comment._id}
+                  //   name={comment.name}
+                  //   avatar={comment.avatar.url}
+                  // />
+                )}
+            </div>
+          </Dialog>
+        </div>
       </div>
     </>
   );
@@ -142,7 +184,7 @@ function LikesDialog({ likes }) {
       <Typography
         variant="none"
         onClick={() => {
-          likes.length && handleClickOpen;
+          handleClickOpen;
         }}
       >
         {likes.length} Likes
@@ -177,51 +219,6 @@ function CommentsDialog({
   commentValue,
   commentOpen,
   setCommentOpen,
-}) {
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-
-  const handleClose = () => {
-    setCommentOpen(false);
-  };
-
-  return (
-    <div>
-      <Typography variant="none" marginRight={"1rem"}>
-        {comments.length}
-      </Typography>
-      <Dialog
-        fullScreen={fullScreen}
-        open={commentOpen}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <div className="DialogBox">
-          <Typography variant="h4">Liked By</Typography>
-          <form className="commentForm">
-            <input
-              type="text"
-              name=""
-              value={commentValue}
-              onChange={() => setCommentValue(e.target.value)}
-              placeholder="Write a comment"
-            />
-          </form>
-
-          {comments &&
-            comments.map(
-              (comment) => ""
-              // <User
-              //   key={comment._id}
-              //   userId={comment._id}
-              //   name={comment.name}
-              //   avatar={comment.avatar.url}
-              // />
-            )}
-        </div>
-      </Dialog>
-    </div>
-  );
-}
+}) {}
 
 export default Post;

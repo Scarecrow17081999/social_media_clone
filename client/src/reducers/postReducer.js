@@ -21,3 +21,21 @@ export const likeReducer = createReducer(initialState, {
     state.message = null;
   },
 });
+
+export const commentsReducer = createReducer(initialState, {
+  addCommentsRequest: (state) => {
+    state.loading = true;
+  },
+  addCommentsSuceess: (state, action) => {
+    state.loading = false;
+    state.users = action.payload;
+  },
+  addCommentsFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+
+  clearErrors: (state) => {
+    state.error = null;
+  },
+});
