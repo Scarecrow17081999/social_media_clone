@@ -4,13 +4,14 @@ const nodemailer = require("nodemailer");
 
 exports.isAuthenticated = async (req, res, next) => {
   try {
-    const { authToken } = req.cookies;
-    if (!authToken) {
+    const { token } = req.cookies;
+    console.log(req.cookies);
+    if (!token) {
       return res.status(401).json({
         message: "You are not authenticated",
       });
     }
-    const decodedUser = await jwt.verify(authToken, process.env.JWT_SECRET);
+    const decodedUser = await jwt.verify(token, process.env.JWT_SECRET);
     req.user = await User.findById(decodedUser._id);
     next();
   } catch (error) {

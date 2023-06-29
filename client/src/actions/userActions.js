@@ -13,9 +13,9 @@ export const loginUser = (email, password) => async (dispatch) => {
       `${url}/login`,
       { email, password },
       {
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
-          credentials: true,
         },
       }
     );
@@ -37,7 +37,9 @@ export const loadUser = () => async (dispatch) => {
     dispatch({
       type: "loadUserRequest",
     });
-    const { data } = await axios.get(`${url}/me`);
+    const { data } = await axios.get(`${url}/me`, {
+      withCredentials: true,
+    });
     dispatch({
       type: "loadUserSuceess",
       payload: data.user,

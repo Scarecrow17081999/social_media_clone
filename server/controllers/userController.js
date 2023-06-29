@@ -72,9 +72,9 @@ exports.loginUser = async (req, res) => {
 
     const tokenOptions = {
       expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-      httpOnly: true,
+      httpOnly: false,
     };
-    return res.status(201).cookie("authToken", token, tokenOptions).json({
+    return res.status(201).cookie("token", token, tokenOptions).json({
       success: true,
       token,
       message: "User logged in successfully",
@@ -266,8 +266,6 @@ exports.deleteProfile = async (req, res) => {
     const tokenOptions = {
       expires: new Date(Date.now()),
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
     };
     res.status(200).cookie("authToken", null, tokenOptions);
 

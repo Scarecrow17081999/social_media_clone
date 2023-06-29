@@ -7,11 +7,16 @@ const postRoute = require("./routes/postRoute");
 
 /// USING MIDDLEWARES ///
 // ------------------------------
-app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 /// USING ROUTES ///
 // ------------------------------
 app.use("/api/v1", userRoute);
