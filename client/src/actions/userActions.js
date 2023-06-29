@@ -48,7 +48,43 @@ export const loadUser = () => async (dispatch) => {
     console.log(error);
     dispatch({
       type: "loadUserFailure",
-      payload: error?.response?.data,
+      payload: error?.response?.data?.message,
+    });
+  }
+};
+// GET FOLLOWING USER POST //
+export const getFollowingPost = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "postOfFollowingRequest",
+    });
+    const { data } = await axios.get(`${url}/posts`, { withCredentials: true });
+    dispatch({
+      type: "postOfFollowingSuceess",
+      payload: data.posts.reverse(),
+    });
+  } catch (error) {
+    dispatch({
+      type: "postOfFollowingFailure",
+      payload: error?.response?.data?.message,
+    });
+  }
+};
+// GET All USERS //
+export const getAllUsers = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "allUsersRequest",
+    });
+    const { data } = await axios.get(`${url}/users`, { withCredentials: true });
+    dispatch({
+      type: "allUsersSuceess",
+      payload: data.users,
+    });
+  } catch (error) {
+    dispatch({
+      type: "allUsersFailure",
+      payload: error?.response?.data?.message,
     });
   }
 };

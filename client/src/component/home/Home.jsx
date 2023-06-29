@@ -1,34 +1,98 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../css/Home.css";
 import User from "../user/User";
 import Post from "../post/Post";
+import { Typography, styled } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../loader/Loader";
+import { getAllUsers, getFollowingPost } from "../../actions/userActions";
+import backgroundImage from "../../assets/background-image/01.jpeg";
+import toast, { Toaster } from "react-hot-toast";
+const Contianer = styled("div")({
+  backgroundImage: `url(${backgroundImage})`,
+  backgroundAttachment: "fixed",
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  height: "100vh",
+});
 const Home = () => {
+  const dispatch = useDispatch();
+  const {
+    posts: incomngPost,
+    loading,
+    error,
+  } = useSelector((state) => state.postOfFollowing);
+  const {
+    users: allUsers,
+    loading: usersLoading,
+    error: allUsersError,
+  } = useSelector((state) => state.allUsers);
+  const [posts, setPosts] = useState(null);
+  const [users, setUser] = useState(null);
+  // console.log(posts);
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      return () => dispatch({ type: "clearErrors" });
+    }
+    if (allUsersError) {
+      toast.error(allUsersError);
+      return () => dispatch({ type: "clearErrors" });
+    }
+    dispatch(getFollowingPost());
+    dispatch(getAllUsers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setPosts(incomngPost);
+    setUser(allUsers);
+  }, [incomngPost, dispatch, allUsers]);
   return (
-    <div className="home">
-      <div className="homeright">
-        <User
-          userId={"user._id"}
-          name={"user.name"}
-          avatar={
-            "https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png"
-          }
-        />
-      </div>
-      <div className="homeleft">
-        <Post
-          postId={""}
-          caption={""}
-          postImage={
-            "https://gumlet.assettype.com/nationalherald%2F2021-06%2F5b7ab58f-690a-4ebc-b543-c05ad62bb151%2FInstagram_rolls_out_full_screen__30_second_ads_in_Reels.jpg?rect=196%2C0%2C1804%2C1015&auto=format%2Ccompress&fmt=webp&w=1200"
-          }
-          likes={[]}
-          comments={[]}
-          ownerImage={""}
-          isDelete={false}
-          isAccount={false}
-        />
-      </div>
-    </div>
+    <>
+      {loading || usersLoading ? (
+        <Loader />
+      ) : (
+        <div className="home">
+          <Toaster position="bottom-center" />
+          <div className="homeright">
+            {users ? (
+              users.map((user) => (
+                <User
+                  key={user._id}
+                  userId={user._id}
+                  name={user.name}
+                  avatar={user.avatar.url}
+                />
+              ))
+            ) : (
+              <Typography>No Users</Typography>
+            )}
+          </div>
+          <Contianer className="homeleft">
+            {posts ? (
+              posts.map((post) => (
+                <Post
+                  key={post._id}
+                  postId={post._id}
+                  caption={post.caption}
+                  postImage={post.image.url}
+                  likes={post.likes}
+                  comments={post.comments}
+                  ownerImage={post.owner.avatar}
+                  isDelete={false}
+                  isAccount={false}
+                  ownerName={post.owner.name}
+                  ownerId={post.owner._id}
+                />
+              ))
+            ) : (
+              <Typography>No Posts Yet</Typography>
+            )}
+          </Contianer>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -160,7 +160,7 @@ exports.getFollowingPost = async (req, res) => {
 
     const posts = await Post.find({
       owner: { $in: following },
-    });
+    }).populate("owner likes comments.user", ["name", "avatar"]);
     res.status(200).json({
       success: true,
       message: "User following posts received",
