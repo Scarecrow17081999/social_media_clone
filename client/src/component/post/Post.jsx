@@ -16,6 +16,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { addCommentOnPost, likePost } from "../../actions/postActions";
 import { getFollowingPost } from "../../actions/userActions";
+import CommentCard from "../commentCard/CommentCard";
 
 const Post = ({
   postId,
@@ -29,16 +30,24 @@ const Post = ({
   ownerName,
   ownerId,
 }) => {
+  const dispatch = useDispatch();
   const [liked, setLiked] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [likedUser, setLikedUser] = useState(false);
   const [commentValue, setCommentValue] = useState("");
-  const [commentToggle, setCommentToggle] = useState(false);
-  const { user } = useSelector((state) => state.user);
   const [commentOpen, setCommentOpen] = useState(false);
-  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { message: commentMessage, error: commentError } = useSelector(
+    (state) => state.comments
+  );
+  const { message: likeMessage, error: likeError } = useSelector(
+    (state) => state.likes
+  );
+
   const handleLikeDislike = async (id) => {
     setLiked(!liked);
-    toast.success(liked ? "Post DisLiked" : "Post Liked", {
+    toast.success(likeMessage, {
       // icon: '👏',
       style: {
         borderRadius: "10px",
@@ -46,24 +55,9 @@ const Post = ({
         color: "#fff",
       },
     });
+
     await dispatch(likePost(id));
     dispatch(getFollowingPost());
-  };
-
-  const addCommentHandler = (e) => {
-    e.preventDefault();
-    dispatch(addCommentOnPost(postId, commentValue));
-  };
-
-  const handleClickOpen = () => {
-    setCommentOpen(true);
-  };
-
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-
-  const handleClose = () => {
-    setCommentOpen(false);
   };
 
   useEffect(() => {
@@ -74,6 +68,37 @@ const Post = ({
     });
   }, [likes, user._id]);
 
+  const handleCommentOpen = () => {
+    setCommentOpen(true);
+  };
+  const handleCommentClose = () => {
+    setCommentOpen(false);
+  };
+
+  const addCommentHandler = async (e) => {
+    e.preventDefault();
+    toast.success(commentMessage, {
+      // icon: '👏',
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
+
+    try {
+      await dispatch(addCommentOnPost(postId, commentValue));
+
+      if (isAccount) {
+        console.log("some message");
+      } else {
+        dispatch(getFollowingPost());
+      }
+      setCommentValue("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <Toaster position="bottom-center" />
@@ -100,22 +125,98 @@ const Post = ({
           </Typography>
         </div>
 
-        <button style={{ background: "transparent", border: "none" }}>
-          {" "}
-          <LikesDialog likes={likes} />
-        </button>
-
         <div className="postFooter">
+          <LikesDialog likes={likes} />
           <Button onClick={() => handleLikeDislike(postId)}>
             {liked ? <Favorite style={{ color: "red" }} /> : <FavoriteBorder />}
           </Button>
+          {/* /// comment dialogue // */}
+          <div style={{ display: "inline", cursor: "pointer" }}>
+            <Typography
+              variant="none"
+              onClick={() => {
+                handleCommentOpen();
+              }}
+            >
+              {comments.length} Comments
+            </Typography>
+            <Dialog
+              fullScreen={fullScreen}
+              open={commentOpen}
+              onClose={handleCommentClose}
+              aria-labelledby="responsive-dialog-title"
+            >
+              <div className="DialogBox">
+                <div className="commentFormContainer">
+                  <form onSubmit={addCommentHandler} class="pa4 black-80">
+                    <div class="measure">
+                      <label for="name" class="f6 b db mb2">
+                        Comments
+                      </label>
+                      <input
+                        value={commentValue}
+                        onChange={(e) => setCommentValue(e.target.value)}
+                        required
+                        placeholder="Comment Here..."
+                        id="name"
+                        class="input-reset ba b--black-20 pa2 mb2 db w-100"
+                        type="text"
+                        aria-describedby="name-desc"
+                      />
+                      <small id="name-desc" class="f6 black-60 db mb2">
+                        Press Enter to Add a Comment.
+                      </small>
+
+                      <Button
+                        style={{ display: "none" }}
+                        variant="contained"
+                        type="submit"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+
+                {comments.length > 0 ? (
+                  <>
+                    {comments.map((comment) => {
+                      return (
+                        <CommentCard
+                          key={comment._id}
+                          userId={comment.user._id}
+                          name={comment.user.name}
+                          avatar={comment.user.avatar.url}
+                          comment={comment.comment}
+                          commentId={comment._id}
+                          isAccount={isAccount}
+                        />
+                      );
+                    })}
+                  </>
+                ) : (
+                  <>
+                    <div
+                      style={{ height: "77%" }}
+                      class="flex items-center justify-center pa9 bg-lightest-blue navy"
+                    >
+                      <svg
+                        class="w1"
+                        dataIcon="info"
+                        viewBox="0 0 32 32"
+                        style={{ fill: "currentcolor" }}
+                      >
+                        <title>info icon</title>
+                        <path d="M16 0 A16 16 0 0 1 16 32 A16 16 0 0 1 16 0 M19 15 L13 15 L13 26 L19 26 z M16 6 A3 3 0 0 0 16 12 A3 3 0 0 0 16 6"></path>
+                      </svg>
+                      <span class="lh-title ml3">No Comments Yet.</span>
+                    </div>
+                  </>
+                )}
+              </div>
+            </Dialog>
+          </div>
           <Button>
-            <CommentsDialog
-              comments={comments}
-              setCommentValue={setCommentValue}
-              commentValue={commentValue}
-              commentOpen={commentOpen}
-            />
             <ChatBubbleOutline
               onClick={() => {
                 handleClickOpen;
@@ -124,42 +225,6 @@ const Post = ({
           </Button>
           <Button>{isDelete ? <DeleteOutline /> : null}</Button>
         </div>
-
-        <div>
-          <Typography variant="none" marginRight={"1rem"}>
-            {comments.length}
-          </Typography>
-          <Dialog
-            fullScreen={fullScreen}
-            open={commentOpen}
-            onClose={handleClose}
-            aria-labelledby="responsive-dialog-title"
-          >
-            <div className="DialogBox">
-              <Typography variant="h4">Liked By</Typography>
-              <form className="commentForm">
-                <input
-                  type="text"
-                  name=""
-                  value={commentValue}
-                  onChange={() => setCommentValue(e.target.value)}
-                  placeholder="Write a comment"
-                />
-              </form>
-
-              {comments &&
-                comments.map(
-                  (comment) => ""
-                  // <User
-                  //   key={comment._id}
-                  //   userId={comment._id}
-                  //   name={comment.name}
-                  //   avatar={comment.avatar.url}
-                  // />
-                )}
-            </div>
-          </Dialog>
-        </div>
       </div>
     </>
   );
@@ -167,7 +232,6 @@ const Post = ({
 
 function LikesDialog({ likes }) {
   const [open, setOpen] = useState(false);
-
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -180,11 +244,11 @@ function LikesDialog({ likes }) {
   };
 
   return (
-    <div>
+    <div style={{ display: "inline", cursor: "pointer" }}>
       <Typography
         variant="none"
         onClick={() => {
-          handleClickOpen;
+          handleClickOpen();
         }}
       >
         {likes.length} Likes
@@ -212,13 +276,5 @@ function LikesDialog({ likes }) {
     </div>
   );
 }
-
-function CommentsDialog({
-  comments,
-  setCommentValue,
-  commentValue,
-  commentOpen,
-  setCommentOpen,
-}) {}
 
 export default Post;

@@ -1,0 +1,50 @@
+.bb {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+
+.b--black-10 {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.db {
+  display: block;
+}
+
+.lh-copy {
+  line-height: 1.5;
+}
+
+.list {
+  list-style-type: none;
+}
+
+.pa3 {
+  padding: 1rem;
+}
+
+.pl0 {
+  padding-left: 0;
+}
+
+.mb1 {
+  margin-bottom: 0.25rem;
+}
+
+.f3 {
+  font-size: 1.5rem;
+}
+
+.f5 {
+  font-size: 1rem;
+}
+
+.measure {
+  max-width: 30em;
+}
+
+@media screen and (min-width: 30em) {
+  .pa4-ns {
+    padding: 2rem;
+  }
+}

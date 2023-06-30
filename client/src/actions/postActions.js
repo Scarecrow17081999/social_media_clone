@@ -13,8 +13,8 @@ export const likePost = (id) => async (dispatch) => {
       withCredentials: true,
     });
     dispatch({
-      type: "likeSuccess",
-      payload: data,
+      type: "likeSuceess",
+      payload: data.message,
     });
   } catch (error) {
     console.log(error);
@@ -41,13 +41,35 @@ export const addCommentOnPost = (id, comment) => async (dispatch) => {
       }
     );
     dispatch({
-      type: "addCommentsSuccess",
+      type: "addCommentsSuceess",
       payload: data.message,
     });
   } catch (error) {
     console.log(error);
     dispatch({
       type: "addCommentsFailure",
+      payload: error?.response?.data?.message,
+    });
+  }
+};
+// ADD COMMENT TO A POST //
+export const deleteCommentOnPost = (id, commentId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "deleteCommentsRequest",
+    });
+    const { data } = await axios.delete(`${url}/post/comment/${id}`, {
+      commentId,
+      withCredentials: true,
+    });
+    dispatch({
+      type: "deleteCommentsSuceess",
+      payload: data.message,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: "deleteCommentsFailure",
       payload: error?.response?.data?.message,
     });
   }

@@ -30,7 +30,6 @@ const Home = () => {
   } = useSelector((state) => state.allUsers);
   const [posts, setPosts] = useState(null);
   const [users, setUser] = useState(null);
-  // console.log(posts);
   useEffect(() => {
     if (error) {
       toast.error(error);

@@ -28,9 +28,37 @@ export const commentsReducer = createReducer(initialState, {
   },
   addCommentsSuceess: (state, action) => {
     state.loading = false;
-    state.users = action.payload;
+    state.message = action.payload;
   },
   addCommentsFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+  deleteCommentsRequest: (state) => {
+    state.loading = true;
+  },
+  deleteCommentsSuceess: (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  },
+  deleteCommentsFailure: (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  },
+
+  clearErrors: (state) => {
+    state.error = null;
+  },
+});
+export const myPostsReducer = createReducer(initialState, {
+  myPostsRequest: (state) => {
+    state.loading = true;
+  },
+  myPostsSuceess: (state, action) => {
+    state.loading = false;
+    state.posts = action.payload;
+  },
+  myPostsFailure: (state, action) => {
     state.loading = false;
     state.error = action.payload;
   },

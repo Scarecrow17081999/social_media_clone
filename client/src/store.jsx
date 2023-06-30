@@ -4,7 +4,11 @@ import {
   postOfFollowingReducer,
   userReducer,
 } from "./reducers/userReducer";
-import { commentsReducer, likeReducer } from "./reducers/postReducer";
+import {
+  commentsReducer,
+  likeReducer,
+  myPostsReducer,
+} from "./reducers/postReducer";
 
 const store = configureStore({
   reducer: {
@@ -13,6 +17,7 @@ const store = configureStore({
     allUsers: allUsersReducer,
     likes: likeReducer,
     comments: commentsReducer,
+    myPosts: myPostsReducer,
   },
 });
 

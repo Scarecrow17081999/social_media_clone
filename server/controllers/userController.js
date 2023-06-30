@@ -160,7 +160,9 @@ exports.getFollowingPost = async (req, res) => {
 
     const posts = await Post.find({
       owner: { $in: following },
-    }).populate("owner likes comments.user", ["name", "avatar"]);
+    })
+      .populate("owner likes comments.user", ["name", "avatar"])
+      .exec();
     res.status(200).json({
       success: true,
       message: "User following posts received",
@@ -415,6 +417,36 @@ exports.resetPassword = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Password changed successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+// GET MY POSTS //
+exports.getMyPosts = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "No User Found",
+      });
+    }
+    const posts = [];
+
+    for (let i = 0; i < user.posts.length; i++) {
+      const post = await Post.findById(user.posts[i]).populate(
+        "likes comments.user"
+      );
+      posts.push(post);
+    }
+    return res.status(200).json({
+      success: true,
+      message: "User Post Sent Successfully",
+      posts,
     });
   } catch (error) {
     return res.status(500).json({
