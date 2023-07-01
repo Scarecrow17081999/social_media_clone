@@ -108,3 +108,23 @@ export const getMyPosts = () => async (dispatch) => {
     });
   }
 };
+// LOGOUT USERS //
+export const logoutUser = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "logoutRequest",
+    });
+    const { data } = await axios.get(`${url}/logout`, {
+      withCredentials: true,
+    });
+    dispatch({
+      type: "logoutSuceess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "logoutFailure",
+      payload: error?.response?.data?.message,
+    });
+  }
+};

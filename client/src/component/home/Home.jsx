@@ -54,6 +54,7 @@ const Home = () => {
       ) : (
         <div className="home">
           <Toaster position="bottom-center" />
+
           <div className="homeright">
             {users ? (
               users.map((user) => (

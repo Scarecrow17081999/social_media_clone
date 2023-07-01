@@ -26,9 +26,13 @@ const User = ({ userId, name, avatar }) => {
                 className="f6 button-reset bg-white ba b--black-10 dim pointer pv1 black-60"
                 type="submit"
               >
-                <Link to={`/user/${userId}`} style={{ color: "inherit" }}>
+                <Link
+                  className="mh2"
+                  to={`/user/${userId}`}
+                  style={{ color: "inherit", textDecoration: "none" }}
+                >
                   {" "}
-                  + Follow
+                  Follow
                 </Link>
               </button>
             </form>

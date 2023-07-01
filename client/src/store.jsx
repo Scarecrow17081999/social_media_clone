@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {
   allUsersReducer,
+  logoutReducer,
   postOfFollowingReducer,
   userReducer,
 } from "./reducers/userReducer";
@@ -18,6 +19,7 @@ const store = configureStore({
     likes: likeReducer,
     comments: commentsReducer,
     myPosts: myPostsReducer,
+    logout: logoutReducer,
   },
 });
 

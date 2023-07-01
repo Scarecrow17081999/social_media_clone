@@ -16,16 +16,16 @@ const Login = () => {
 
   return (
     <div className="login">
-      <main style={{ width: "60%" }} className="loginForm" class="pa4 black-90">
-        <form onSubmit={loginHandler} class="measure center">
-          <fieldset id="sign_up" class="ba b--transparent ph0 mh0">
-            <legend class="f4 fw6 ph0 mh0">Sign In</legend>
-            <div class="mt3">
-              <label class="db fw6 lh-copy f6" for="email-address">
+      <main style={{ width: "60%" }} className="loginForm pa4 black-90">
+        <form onSubmit={loginHandler} className="measure center">
+          <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
+            <legend className="f4 fw6 ph0 mh0">Sign In</legend>
+            <div className="mt3">
+              <label className="db fw6 lh-copy f6" htmlFor="email-address">
                 Email
               </label>
               <input
-                class="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                 type="email"
                 name="email-address"
                 id="email-address"
@@ -35,12 +35,12 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div class="mv3">
-              <label class="db fw6 lh-copy f6" for="password">
+            <div className="mv3">
+              <label className="db fw6 lh-copy f6" htmlFor="password">
                 Password
               </label>
               <input
-                class="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                 type="password"
                 name="password"
                 id="password"
@@ -50,23 +50,23 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <label class="pa0 ma0 lh-copy f6 pointer">
+            <label className="pa0 ma0 lh-copy f6 pointer">
               <input type="checkbox" /> Remember me
             </label>
           </fieldset>
-          <div class="">
+          <div className="">
             <button
-              class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
+              className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
               type="submit"
             >
               Sign In{" "}
             </button>
           </div>
-          <div class="lh-copy mt3">
-            <a href="#0" class="f6 link dim black db">
+          <div className="lh-copy mt3">
+            <a href="#0" className="f6 link dim black db">
               Sign up
             </a>
-            <Link to="/forgot/password" class="f6 link dim black db">
+            <Link to="/forgot/password" className="f6 link dim black db">
               Forgot your password?
             </Link>
           </div>

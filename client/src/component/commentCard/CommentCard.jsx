@@ -27,24 +27,24 @@ const CommentCard = ({
   };
   return (
     <>
-      <ul class="list pl0">
+      <ul className="list pl0">
         <Link
           //   to={`/user/${userId}`}
           style={{ textDecoration: "none", color: "inherit" }}
         >
-          <li class="pa3 pa4-ns bb b--black-05 bg-black-05">
+          <li className="pa3 pa4-ns bb b--black-05 bg-black-05">
             <img
-              class="br3 ba b--black-10 h3 w3"
+              className="br3 ba b--black-10 h3 w3"
               //   style={{ width: "10%", borderRadius: "50%" }}
               src={avatar}
               alt="Image"
             />
-            <b class="db f3 mb1">{name}</b>
-            <span class="f5 db lh-copy measure">{comment}</span>
+            <b className="db f3 mb1">{name}</b>
+            <span className="f5 db lh-copy measure">{comment}</span>
             {isAccount ? (
               <button
                 onClick={deleCommentHandler}
-                class="f6 button-reset mv3  bg-white ba b--black-30 dim pointer pv2 ph2 black-100"
+                className="f6 button-reset mv3  bg-white ba b--black-30 dim pointer pv2 ph2 black-100"
                 type="submit"
               >
                 Delete{" "}
@@ -52,7 +52,7 @@ const CommentCard = ({
             ) : userId == user._id ? (
               <button
                 onClick={deleCommentHandler}
-                class="f6 button-reset mv3  bg-white ba b--black-30 dim pointer pv2 ph2 black-100"
+                className="f6 button-reset mv3  bg-white ba b--black-30 dim pointer pv2 ph2 black-100"
                 type="submit"
               >
                 Delete{" "}

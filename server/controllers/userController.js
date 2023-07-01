@@ -288,7 +288,9 @@ exports.deleteProfile = async (req, res) => {
 
 exports.myProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).populate("posts");
+    const user = await User.findById(req.user._id).populate(
+      "posts followers following"
+    );
 
     res.status(200).json({
       success: true,
@@ -439,7 +441,7 @@ exports.getMyPosts = async (req, res) => {
 
     for (let i = 0; i < user.posts.length; i++) {
       const post = await Post.findById(user.posts[i]).populate(
-        "likes comments.user"
+        "likes comments.user owner"
       );
       posts.push(post);
     }

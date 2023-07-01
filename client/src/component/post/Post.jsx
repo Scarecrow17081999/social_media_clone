@@ -148,9 +148,9 @@ const Post = ({
             >
               <div className="DialogBox">
                 <div className="commentFormContainer">
-                  <form onSubmit={addCommentHandler} class="pa4 black-80">
-                    <div class="measure">
-                      <label for="name" class="f6 b db mb2">
+                  <form onSubmit={addCommentHandler} className="pa4 black-80">
+                    <div className="measure">
+                      <label htmlFor="name" className="f6 b db mb2">
                         Comments
                       </label>
                       <input
@@ -159,11 +159,11 @@ const Post = ({
                         required
                         placeholder="Comment Here..."
                         id="name"
-                        class="input-reset ba b--black-20 pa2 mb2 db w-100"
+                        className="input-reset ba b--black-20 pa2 mb2 db w-100"
                         type="text"
                         aria-describedby="name-desc"
                       />
-                      <small id="name-desc" class="f6 black-60 db mb2">
+                      <small id="name-desc" className="f6 black-60 db mb2">
                         Press Enter to Add a Comment.
                       </small>
 
@@ -198,10 +198,10 @@ const Post = ({
                   <>
                     <div
                       style={{ height: "77%" }}
-                      class="flex items-center justify-center pa9 bg-lightest-blue navy"
+                      className="flex items-center justify-center pa9 bg-lightest-blue navy"
                     >
                       <svg
-                        class="w1"
+                        className="w1"
                         dataIcon="info"
                         viewBox="0 0 32 32"
                         style={{ fill: "currentcolor" }}
@@ -209,7 +209,7 @@ const Post = ({
                         <title>info icon</title>
                         <path d="M16 0 A16 16 0 0 1 16 32 A16 16 0 0 1 16 0 M19 15 L13 15 L13 26 L19 26 z M16 6 A3 3 0 0 0 16 12 A3 3 0 0 0 16 6"></path>
                       </svg>
-                      <span class="lh-title ml3">No Comments Yet.</span>
+                      <span className="lh-title ml3">No Comments Yet.</span>
                     </div>
                   </>
                 )}
